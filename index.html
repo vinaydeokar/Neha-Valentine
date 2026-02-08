@@ -1,192 +1,275 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Be My Valentine 💖</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine 💖</title>
 
-    <!-- Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <style>
-      * {
-        box-sizing: border-box;
-        font-family: "Poppins", "Comic Sans MS", sans-serif;
-      }
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Poppins", "Comic Sans MS", sans-serif;
+    }
 
-      body {
-        margin: 0;
-        min-height: 100vh;
-        background: linear-gradient(135deg, #ffd6e8, #ffeef5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 40px;
-      }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffd6e8, #ffeef5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
 
-      .card {
-        background: white;
-        width: 520px;
-        min-height: 360px;
-        padding: 60px 50px;
-        border-radius: 36px;
-        text-align: center;
-        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.18);
-      }
+    /* ---------------- CARD ---------------- */
+    .card {
+      background: white;
+      width: 520px;
+      min-height: 360px;
+      padding: 60px 50px;
+      border-radius: 36px;
+      text-align: center;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.18);
+      transition: all 0.6s ease;
+      position: relative;
+      z-index: 2;
+    }
 
-      .emoji {
-        font-size: 80px;
-        margin-bottom: 24px;
-      }
+    .emoji {
+      font-size: 80px;
+      margin-bottom: 24px;
+    }
 
-      h1 {
-        font-size: 24px;
-        margin-bottom: 50px;
-      }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 50px;
+    }
 
-      .buttons {
-        display: flex;
-        justify-content: center;
-        gap: 24px;
-        position: relative;
-      }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      position: relative;
+    }
 
-      button {
-        border: none;
-        padding: 16px 30px;
-        border-radius: 999px;
-        font-size: 17px;
-        cursor: pointer;
-        transition: transform 0.2s ease;
-        white-space: nowrap;
-      }
+    button {
+      border: none;
+      padding: 16px 30px;
+      border-radius: 999px;
+      font-size: 17px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      white-space: nowrap;
+    }
 
-      #yesBtn {
-        background: #ff4d88;
-        color: white;
-        z-index: 2;
-      }
+    #yesBtn {
+      background: #ff4d88;
+      color: white;
+      z-index: 2;
+    }
 
-      #yesBtn:hover {
-        transform: scale(1.1);
-      }
+    #yesBtn:hover {
+      transform: scale(1.1);
+    }
 
-      #noBtn {
-        background: #ccc;
-        color: #555;
-        pointer-events: none;
-      }
+    #noBtn {
+      background: #ccc;
+      color: #555;
+      pointer-events: none;
+    }
 
-      .note {
-        margin-top: 22px;
-        font-size: 14px;
-        color: #999;
-      }
+    .note {
+      margin-top: 22px;
+      font-size: 14px;
+      color: #999;
+    }
 
-      /* NEW SCREEN */
-      .image-screen {
-        display: none;
-        text-align: center;
-        animation: fadeIn 0.8s ease forwards;
-      }
+    /* ---------------- LOVE SCREEN ---------------- */
+    .image-screen {
+      display: none;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+      z-index: 2;
+    }
 
-      .image-screen img {
-        max-width: 320px;
-        border-radius: 28px;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
-      }
+    .image-screen img {
+      max-width: 320px;
+      border-radius: 30px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+      animation: float 3s ease-in-out infinite;
+    }
 
-      .image-screen h2 {
-        margin-top: 24px;
-        color: #ff4d88;
-      }
+    .message {
+      margin-top: 25px;
+      font-size: 22px;
+      color: #ff4d88;
+      font-weight: 600;
+      min-height: 32px;
+    }
 
-      @keyframes fadeIn {
-        from { opacity: 0; transform: scale(0.9); }
-        to { opacity: 1; transform: scale(1); }
-      }
-    </style>
-  </head>
+    /* ---------------- HEARTS ---------------- */
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      pointer-events: none;
+      animation: rise linear forwards;
+    }
 
-  <body>
-    <!-- ORIGINAL CARD -->
-    <div class="card" id="card">
-      <div class="emoji">🐣💗</div>
-      <h1>Hey Babda, Will you be my Valentine?</h1>
+    @keyframes rise {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-110vh); opacity: 0; }
+    }
 
-      <div class="buttons">
-        <button id="yesBtn">Yes 💖</button>
-        <button id="noBtn">No 🙃</button>
-      </div>
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
 
-      <div class="note">*No is not an option 😈*</div>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ORIGINAL CARD -->
+  <div class="card" id="card">
+    <div class="emoji">🐣💗</div>
+    <h1>Hey Neha, Will you be my Valentine?</h1>
+
+    <div class="buttons">
+      <button id="yesBtn">Yes 💖</button>
+      <button id="noBtn">No 🙃</button>
     </div>
 
-    <!-- NEW IMAGE SCREEN -->
-    <div class="image-screen" id="imageScreen">
-      <!-- 👉 Replace image path with your photo -->
-      <img src="https://ik.imagekit.io/ljb3obi08a/20260131_131009.jpg" alt="Love" />
-      <h2>Yayyy ❤️ Forever mine!</h2>
-    </div>
+    <div class="note">*No is not an option 😈*</div>
+  </div>
 
-    <script>
-      const noBtn = document.getElementById("noBtn");
-      const yesBtn = document.getElementById("yesBtn");
-      const card = document.getElementById("card");
-      const imageScreen = document.getElementById("imageScreen");
+  <!-- IMAGE SCREEN -->
+  <div class="image-screen" id="imageScreen">
+    <img src="https://ik.imagekit.io/ljb3obi08a/20260131_131009.jpg" alt="Love" />
+    <div class="message" id="loveText"></div>
+  </div>
 
-      let escaped = false;
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const card = document.getElementById("card");
+const imageScreen = document.getElementById("imageScreen");
+const loveText = document.getElementById("loveText");
 
-      function escapeNoButton() {
-        if (!escaped) {
-          const rect = noBtn.getBoundingClientRect();
-          noBtn.style.position = "fixed";
-          noBtn.style.left = rect.left + "px";
-          noBtn.style.top = rect.top + "px";
-          escaped = true;
-        }
+/* =========================
+   ORIGINAL NO BUTTON ESCAPE
+========================= */
+let escaped = false;
+let initialRect = null;
 
-        const padding = 20;
-        const noRect = noBtn.getBoundingClientRect();
+function escapeNoButton() {
+  if (!escaped) {
+    initialRect = noBtn.getBoundingClientRect();
+    noBtn.style.position = "fixed";
+    noBtn.style.left = initialRect.left + "px";
+    noBtn.style.top = initialRect.top + "px";
+    escaped = true;
+  }
 
-        const x = Math.random() * (window.innerWidth - noRect.width - padding);
-        const y = Math.random() * (window.innerHeight - noRect.height - padding);
+  const padding = 20;
+  const yesRect = yesBtn.getBoundingClientRect();
+  const noRect = noBtn.getBoundingClientRect();
 
-        noBtn.style.left = `${x}px`;
-        noBtn.style.top = `${y}px`;
-      }
+  let x, y, safe;
 
-      document.addEventListener("mousemove", (e) => {
-        const rect = noBtn.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
+  do {
+    x = Math.random() * (window.innerWidth - noRect.width - padding);
+    y = Math.random() * (window.innerHeight - noRect.height - padding);
 
-        const distance = Math.hypot(e.clientX - cx, e.clientY - cy);
-        if (distance < 130) escapeNoButton();
-      });
+    safe =
+      x + noRect.width < yesRect.left ||
+      x > yesRect.right ||
+      y + noRect.height < yesRect.top ||
+      y > yesRect.bottom;
 
-      document.addEventListener("touchstart", escapeNoButton);
+  } while (!safe);
 
-      // YES CLICK
-      yesBtn.addEventListener("click", () => {
-        const end = Date.now() + 2000;
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
+}
 
-        (function frame() {
-          confetti({
-            particleCount: 12,
-            spread: 90,
-            colors: ["#ff4d88", "#ff99bb", "#ffccd9"],
-          });
-          if (Date.now() < end) requestAnimationFrame(frame);
-        })();
+document.addEventListener("mousemove", (e) => {
+  const rect = noBtn.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
 
-        // after confetti → show image
-        setTimeout(() => {
-          card.style.display = "none";
-          imageScreen.style.display = "block";
-        }, 1800);
-      });
-    </script>
-  </body>
+  const distance = Math.hypot(e.clientX - cx, e.clientY - cy);
+  if (distance < 130) escapeNoButton();
+});
+
+document.addEventListener("touchstart", escapeNoButton);
+
+
+/* =========================
+   ROMANTIC EFFECTS
+========================= */
+
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = "💖";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (18 + Math.random()*20) + "px";
+  heart.style.animationDuration = (4 + Math.random()*3) + "s";
+  document.body.appendChild(heart);
+
+  setTimeout(()=>heart.remove(),7000);
+}
+
+function typeText(text, speed = 50) {
+  let i = 0;
+  loveText.innerHTML = "";
+
+  const interval = setInterval(() => {
+    loveText.innerHTML += text[i];
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, speed);
+}
+
+
+/* =========================
+   YES CLICK
+========================= */
+yesBtn.addEventListener("click", () => {
+
+  const end = Date.now() + 2500;
+
+  (function frame() {
+    confetti({
+      particleCount: 12,
+      spread: 90,
+      colors: ["#ff4d88", "#ff99bb", "#ffccd9"]
+    });
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+
+  card.style.opacity = 0;
+  card.style.transform = "scale(.9)";
+
+  setTimeout(() => {
+    card.style.display = "none";
+    imageScreen.style.display = "block";
+
+    setInterval(createHeart, 300);
+
+    typeText("Yayyy 💖 Forever Mine... तू मला खूप खूप आवडतेस ❤️✨🌸");
+
+  }, 900);
+});
+</script>
+
+</body>
 </html>
-
